@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.cdvasquez.amazonviewer"},{"l":"com.cdvasquez.amazonviewer.model"},{"l":"com.cdvasquez.util"}];updateSearchResults();

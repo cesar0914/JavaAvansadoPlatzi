@@ -1,6 +1,18 @@
 package com.cdvasquez.amazonviewer.model;
 
-public class Film {
+/** 
+ * Film es una clase padre abstracta
+ * <p>
+ * Es la clase base de la familia Films, como es abstracta no se puede instanciar y por ende contiene el método abstracto 
+ * {@code view()} que es obligatorio implementar para todo aquél que pertenezca a la familia.
+ * 
+ * @author cedvasquez
+ * @version 1.1
+ * @since 2020
+ * 
+ * */
+
+public abstract class Film {
 	
 	private String title;
 	private String genre;
@@ -79,5 +91,9 @@ public class Film {
 		this.viewed = viewed;
 	}
 		
+	/**
+	 * {@code view()} es un método abstracto obligatorio de implementar*/
+	public abstract void view(); 
+	
 
 }
