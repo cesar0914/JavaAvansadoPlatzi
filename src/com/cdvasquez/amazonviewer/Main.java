@@ -4,6 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import com.cdvasquez.amazonviewer.model.Book;
 import com.cdvasquez.amazonviewer.model.Chapter;
@@ -104,9 +107,14 @@ public class Main {
 			System.out.println(":: MOVIES ::");
 			System.out.println();
 			
-			for (int i = 0; i < movies.size(); i++) { //1. Movie 1
+			AtomicInteger atomicInteger = new AtomicInteger(1);
+			movies.forEach(movie ->{
+				System.out.println(atomicInteger.getAndIncrement()+". "+ movie.getTitle() + " Visto: " + movie.isViewed());
+			});
+			
+			/*for (int i = 0; i < movies.size(); i++) { //1. Movie 1
 				System.out.println(i+1 + ". " + movies.get(i).getTitle() + " Visto: " + movies.get(i).isViewed());
-			}
+			}*/
 			
 			System.out.println("0. Regresar al Menu");
 			System.out.println();
@@ -256,34 +264,31 @@ public class Main {
 		report.setNameFile("reporte");
 		report.setExtension("txt");
 		report.setTitle(":: VISTOS ::");
-		String contentReport = "";
+		StringBuilder contentReport = new StringBuilder();
 		
-		for (Movie movie : movies) {
-			if (movie.getIsVeiwed()) {
-				contentReport += movie.toString() + "\n";
-				
-			}
-		}
 		
-		for (Serie serie : series) {
+		movies.stream()
+		.filter(movie -> movie.getIsVeiwed())
+		.forEach(movie -> contentReport.append(movie.toString() + "\n"));
+		
+		//Predicate<Serie> seriesViewed = serie -> serie.getIsVeiwed();		
+		//Consumer<Serie> seriesEach = serie -> contentReport.append(serie.toString() + "\n");
+		Consumer<Serie> seriesEach = serie -> {
 			ArrayList<Chapter> chapters = serie.getChapters();
-			for (Chapter chapter : chapters) {
-				if (chapter.getIsVeiwed()) {
-					contentReport += chapter.toString() + "\n";
-					
-				}
-			}	
-		}
+			chapters.stream().
+			filter(chapter -> chapter.getIsVeiwed())
+			.forEach(chapter -> contentReport.append(chapter.toString() + "\n"));
+		};
+		
+		series.stream().forEach(seriesEach);
 		
 		
-		for (Book book : books) {
-			if (book.getIsReaded()) {
-				contentReport += book.toString() + "\n";
-				
-			}
-		}
-
-		report.setContent(contentReport);
+		books.stream()
+		.filter(book -> book.getIsReaded())
+		.forEach(book -> contentReport.append(book.toString() +"\n"));
+		
+		
+		report.setContent(contentReport.toString());
 		report.makeReport();
 		System.out.println("Reporte Generado");
 		System.out.println();
